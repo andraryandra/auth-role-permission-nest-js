@@ -1,37 +1,23 @@
-import { BaseEntity } from 'src/config/common/BaseEntity';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-  OneToMany,
-} from 'typeorm';
-import { PermissionEntity } from './permission.entity';
-import { UserEntity } from './user.entity';
-import { UserRoleEntity } from './user-role..entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { RolePermissionEntity } from './role_permissions.entity';
+import { UserRoleEntity } from './user_roles.entity';
 
 @Entity('roles')
-export class RoleEntity extends BaseEntity {
+export class RoleEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()
   description: string;
 
-  @ManyToMany(() => PermissionEntity, { cascade: true })
-  @JoinTable({
-    name: 'role_permission',
-    joinColumn: { name: 'role_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'permission_id', referencedColumnName: 'id' },
-  })
-  permissions: PermissionEntity[];
-
-  @ManyToMany(() => UserEntity, (user) => user.roles)
-  users: UserEntity[];
+  @OneToMany(
+    () => RolePermissionEntity,
+    (rolePermission) => rolePermission.role,
+  )
+  rolePermissions: RolePermissionEntity[];
 
   @OneToMany(() => UserRoleEntity, (userRole) => userRole.role)
   userRoles: UserRoleEntity[];

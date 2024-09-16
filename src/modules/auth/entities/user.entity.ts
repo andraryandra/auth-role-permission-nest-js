@@ -1,21 +1,12 @@
-import { BaseEntity } from 'src/config/common/BaseEntity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { RoleEntity } from './role.entity';
-import { UserRoleEntity } from './user-role..entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { UserRoleEntity } from './user_roles.entity';
 
 @Entity('users')
-export class UserEntity extends BaseEntity {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column({ unique: true })
@@ -26,14 +17,6 @@ export class UserEntity extends BaseEntity {
 
   @Column({ nullable: true })
   avatar?: string;
-
-  @ManyToMany(() => RoleEntity, (role) => role.users)
-  @JoinTable({
-    name: 'user_role',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
-  })
-  roles: RoleEntity[];
 
   @OneToMany(() => UserRoleEntity, (userRole) => userRole.user)
   userRoles: UserRoleEntity[];
