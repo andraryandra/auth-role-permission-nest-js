@@ -27,6 +27,8 @@ import { LoginDto } from '../dto/login.dto';
 
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { existsSync, unlink } from 'fs';
+// import { RolesGuard } from '../roles.guard';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -53,11 +55,26 @@ export class AuthController {
   @ApiBearerAuth('accessToken')
   @UseGuards(AuthGuard)
   @Get('/profile')
+  // @Permission('READ_USER')
   async profile(@Req() req) {
     const userId = req.user.id;
     const profile = await this.authService.profile(userId);
 
     return new ResponseFormatter(profile, 'Profile data');
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get User All Data',
+  })
+  @ApiBearerAuth('accessToken')
+  @UseGuards(AuthGuard)
+  @Permission('READ_USER')
+  @Get('/user')
+  async user() {
+    const user = await this.authService.getUserAll();
+
+    return new ResponseFormatter(user, 'Get User All Data');
   }
 
   @ApiBearerAuth('accessToken')
