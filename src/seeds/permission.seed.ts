@@ -14,6 +14,93 @@ export async function seedPermissions() {
       { name: 'READ_USER', description: 'Permission to read user data' },
       { name: 'WRITE_USER', description: 'Permission to write user data' },
       { name: 'DELETE_USER', description: 'Permission to delete user data' },
+
+      { name: 'read:role', description: 'Permission to read role data' },
+      { name: 'create:role', description: 'Permission to write role data' },
+      { name: 'update:role', description: 'Permission to write role data' },
+      { name: 'delete:role', description: 'Permission to delete role data' },
+
+      {
+        name: 'read:permission',
+        description: 'Permission to read permission data',
+      },
+      {
+        name: 'create:permission',
+        description: 'Permission to write permission data',
+      },
+      {
+        name: 'update:permission',
+        description: 'Permission to write permission data',
+      },
+      {
+        name: 'delete:permission',
+        description: 'Permission to delete permission data',
+      },
+
+      {
+        name: 'read:user-role',
+        description: 'Permission to read user role data',
+      },
+      {
+        name: 'create:user-role',
+        description: 'Permission to write user role data',
+      },
+      {
+        name: 'update:user-role',
+        description: 'Permission to write user role data',
+      },
+      {
+        name: 'delete:user-role',
+        description: 'Permission to delete user role data',
+      },
+
+      {
+        name: 'read:role-permission',
+        description: 'Permission to read role permission data',
+      },
+      {
+        name: 'create:role-permission',
+        description: 'Permission to write role permission data',
+      },
+      {
+        name: 'update:role-permission',
+        description: 'Permission to write role permission data',
+      },
+      {
+        name: 'delete:role-permission',
+        description: 'Permission to delete role permission data',
+      },
+
+      {
+        name: 'read:category',
+        description: 'Permission to read category data',
+      },
+      {
+        name: 'create:category',
+        description: 'Permission to write category data',
+      },
+      {
+        name: 'update:category',
+        description: 'Permission to write category data',
+      },
+      {
+        name: 'delete:category',
+        description: 'Permission to delete category data',
+      },
+
+      { name: 'read:product', description: 'Permission to read product data' },
+      {
+        name: 'create:product',
+        description: 'Permission to write product data',
+      },
+      {
+        name: 'update:product',
+        description: 'Permission to write product data',
+      },
+      {
+        name: 'delete:product',
+        description: 'Permission to delete product data',
+      },
     ];
 
     for (const permissionData of permissions) {
