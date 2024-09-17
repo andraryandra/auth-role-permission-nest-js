@@ -17,6 +17,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { ProductDtoOut } from './dto/product.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Product')
 @ApiBearerAuth('accessToken')
@@ -25,6 +26,12 @@ import { ProductDtoOut } from './dto/product.dto';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product data',
+    type: CreateProductDto,
+  })
+  @Permission('create:product')
   @Post()
   async create(@Body() createProductDto: CreateProductDto) {
     const product = await this.productsService.create(createProductDto);
@@ -37,6 +44,7 @@ export class ProductsController {
     description: 'Products data',
     type: ProductDtoOut,
   })
+  @Permission('read:product')
   @Get()
   async findAll() {
     const products = await this.productsService.findAll();
@@ -53,6 +61,7 @@ export class ProductsController {
     description: 'Product data',
     type: ProductDtoOut,
   })
+  @Permission('read:product')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const product = await this.productsService.findOne(+id);
@@ -64,6 +73,12 @@ export class ProductsController {
     return new ResponseFormatter(product, 'Product found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product data',
+    type: UpdateProductDto,
+  })
+  @Permission('update:product')
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -78,6 +93,7 @@ export class ProductsController {
     return new ResponseFormatter(product, 'Product updated');
   }
 
+  @Permission('delete:product')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const product = await this.productsService.remove(+id);
