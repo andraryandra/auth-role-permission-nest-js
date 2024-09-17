@@ -13,7 +13,7 @@ export class RoleService {
 
   async findAll() {
     const roles = await this.roleRepository.find({
-      relations: ['permissions'],
+      // relations: ['rolePermissions', 'userRoles'],
       order: {
         id: 'DESC',
       },

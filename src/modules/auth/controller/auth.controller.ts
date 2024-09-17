@@ -55,7 +55,6 @@ export class AuthController {
   @ApiBearerAuth('accessToken')
   @UseGuards(AuthGuard)
   @Get('/profile')
-  // @Permission('READ_USER')
   async profile(@Req() req) {
     const userId = req.user.id;
     const profile = await this.authService.profile(userId);

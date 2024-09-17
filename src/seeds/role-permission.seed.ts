@@ -7,12 +7,10 @@ import { UserEntity } from '../modules/auth/entities/user.entity';
 import { RolePermissionEntity } from '../modules/auth/entities/role_permissions.entity';
 import { UserRoleEntity } from '../modules/auth/entities/user_roles.entity';
 
-async function seed() {
-  // Create a DataSource instance
+export async function seedRolePermission() {
   const dataSource = new DataSource(config);
 
   try {
-    // Initialize the DataSource
     await dataSource.initialize();
 
     const permissionRepository = dataSource.getRepository(PermissionEntity);
@@ -80,7 +78,7 @@ async function seed() {
       }
     }
 
-    // Insert role_permissions
+    // Insert role_permissions (Avoiding duplicates)
     const adminRole = await roleRepository.findOneBy({ name: 'Admin' });
     const readPermission = await permissionRepository.findOneBy({
       name: 'READ_USER',
@@ -93,38 +91,66 @@ async function seed() {
     });
 
     if (adminRole && readPermission && writePermission && deletePermission) {
-      await rolePermissionRepository.save([
-        { role: adminRole, permission: readPermission },
-        { role: adminRole, permission: writePermission },
-        { role: adminRole, permission: deletePermission },
-      ]);
-      console.log('Role permissions created');
+      for (const permission of [
+        readPermission,
+        writePermission,
+        deletePermission,
+      ]) {
+        const existingRolePermission = await rolePermissionRepository.findOne({
+          where: { role: adminRole, permission: permission },
+        });
+        if (!existingRolePermission) {
+          await rolePermissionRepository.save({
+            role: adminRole,
+            permission: permission,
+          });
+          console.log(
+            `Assigned permission ${permission.name} to role ${adminRole.name}`,
+          );
+        } else {
+          console.log(
+            `Permission ${permission.name} is already assigned to role ${adminRole.name}`,
+          );
+        }
+      }
     }
 
-    // Insert user_roles
+    // Insert user_roles (Avoiding duplicates)
     const adminUser = await userRepository.findOneBy({
       email: 'admin@example.com',
     });
     const normalUser = await userRepository.findOneBy({
       email: 'user@example.com',
     });
+
     if (adminUser && adminRole) {
-      await userRoleRepository.save({ user: adminUser, role: adminRole });
-      console.log('Admin user role assigned');
+      const existingUserRole = await userRoleRepository.findOne({
+        where: { user: adminUser, role: adminRole },
+      });
+      if (!existingUserRole) {
+        await userRoleRepository.save({ user: adminUser, role: adminRole });
+        console.log('Admin user role assigned');
+      } else {
+        console.log('Admin user already has the Admin role');
+      }
     }
+
     if (normalUser && adminRole) {
-      await userRoleRepository.save({ user: normalUser, role: adminRole });
-      console.log('Normal user role assigned');
+      const existingUserRole = await userRoleRepository.findOne({
+        where: { user: normalUser, role: adminRole },
+      });
+      if (!existingUserRole) {
+        await userRoleRepository.save({ user: normalUser, role: adminRole });
+        console.log('Normal user role assigned');
+      } else {
+        console.log('Normal user already has the Admin role');
+      }
     }
 
     console.log('Data seeded successfully!');
   } catch (error) {
     console.error('Error seeding data:', error);
   } finally {
-    // Close the DataSource connection
     await dataSource.destroy();
   }
 }
-
-// Run the seed function
-seed();
