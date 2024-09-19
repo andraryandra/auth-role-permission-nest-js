@@ -22,14 +22,15 @@ export class AuthGuard extends PassportAuthGuard('jwt') implements CanActivate {
       return false;
     }
 
-    // Proceed to check roles and permissions
-    const requiredPermission = this.reflector.get<string>(
+    // Get required permissions from both method and class level
+    const requiredPermission = this.reflector.getAllAndOverride<string>(
       REQUIRES_PERMISSION_KEY,
-      context.getHandler(),
+      [context.getHandler(), context.getClass()],
     );
 
+    // If no specific permission is required, allow access
     if (!requiredPermission) {
-      return true; // No specific permission required
+      return true;
     }
 
     const request = context.switchToHttp().getRequest();
@@ -46,6 +47,7 @@ export class AuthGuard extends PassportAuthGuard('jwt') implements CanActivate {
     console.log('User Permissions:', user.permissions);
     console.log('Required Permission:', requiredPermission);
 
+    // Check if the user has the required permission
     if (!user.permissions.includes(requiredPermission)) {
       throw new ForbiddenException(
         'You do not have permission to access this resource',
@@ -61,9 +63,8 @@ export class AuthGuard extends PassportAuthGuard('jwt') implements CanActivate {
     }
     // console.log('Decoded User:', user);
 
-    // Ensure user object has permissions property
     if (!user.permissions) {
-      user.permissions = []; // Default to empty array if not present
+      user.permissions = [];
     }
 
     return user;
