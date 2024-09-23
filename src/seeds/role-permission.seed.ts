@@ -47,12 +47,21 @@ export async function seedRolePermission() {
     const roles = [
       { name: 'Admin', description: 'Administrator role with full access' },
       { name: 'User', description: 'Standard user role with limited access' },
+      {
+        name: 'AdminGudang',
+        description: 'Standard user role with limited access',
+      },
     ];
 
     // Users data
     const users = [
       { username: 'admin', email: 'admin@example.com', password: 'admin123' },
       { username: 'user', email: 'user@example.com', password: 'user123' },
+      {
+        username: 'gudang',
+        email: 'gudang@example.com',
+        password: 'gudang123',
+      },
     ];
 
     // Fetch existing permissions and roles in one query
@@ -159,6 +168,62 @@ export async function seedRolePermission() {
         console.log('Normal user role assigned');
       } else {
         console.log('Normal user already has the Admin role');
+      }
+    }
+
+    const permissionGudang = [
+      {
+        name: 'read:category',
+        description: 'Permission to read category data',
+      },
+    ];
+
+    const userRoleGudang =
+      existingRoleMap.get('AdminGudang') ||
+      (await roleRepository.findOneBy({ name: 'AdminGudang' }));
+
+    const allPermissionsGudang = await permissionRepository.find({
+      where: { name: In(permissionGudang.map((p) => p.name)) },
+    });
+
+    const existingRolePermissionsGudang = await rolePermissionRepository.findBy(
+      {
+        role: userRoleGudang,
+      },
+    );
+
+    const existingRolePermissionMapGudang = new Map(
+      existingRolePermissionsGudang.map((rp) => [rp.permission.name, rp]),
+    );
+
+    if (userRoleGudang) {
+      for (const permission of allPermissionsGudang) {
+        if (!existingRolePermissionMapGudang.has(permission.name)) {
+          await rolePermissionRepository.save({
+            role: userRoleGudang,
+            permission,
+          });
+          console.log(`Permission ${permission.name} assigned to Admin role`);
+        }
+      }
+    }
+
+    const gudangUser = await userRepository.findOneBy({
+      email: 'gudang@example.com',
+    });
+
+    if (gudangUser && userRoleGudang) {
+      const existingGudangUserRole = await userRoleRepository.findOne({
+        where: { user: gudangUser, role: userRoleGudang },
+      });
+      if (!existingGudangUserRole) {
+        await userRoleRepository.save({
+          user: gudangUser,
+          role: userRoleGudang,
+        });
+        console.log('Admin user role assigned');
+      } else {
+        console.log('Admin user already has the Admin role');
       }
     }
 
