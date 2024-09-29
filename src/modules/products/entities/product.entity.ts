@@ -1,6 +1,5 @@
 import {
   Column,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -33,9 +32,6 @@ export class ProductEntity extends BaseEntity {
 
   @Column({ name: 'category_id' })
   categoryId: number;
-
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-  deletedAt?: Date;
 
   @ManyToOne(() => CategoryEntity)
   @JoinColumn({
