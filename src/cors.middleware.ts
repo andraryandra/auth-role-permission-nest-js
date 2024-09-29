@@ -7,7 +7,7 @@ export class CorsMiddleware implements NestMiddleware {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Anda bisa mengganti '*' dengan domain frontend Anda
     res.setHeader(
       'Access-Control-Allow-Methods',
-      'GET, POST, OPTIONS, PUT, DELETE',
+      'GET, POST, OPTIONS, PUT, PATCH, DELETE',
     );
     res.setHeader(
       'Access-Control-Allow-Headers',

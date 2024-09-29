@@ -9,6 +9,7 @@ import { join } from 'path';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CorsMiddleware } from './cors.middleware';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CorsMiddleware } from './cors.middleware';
     }),
     CategoriesModule,
     ProductsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

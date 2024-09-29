@@ -20,11 +20,7 @@ export async function seedRolePermission() {
       dataSource.getRepository(RolePermissionEntity);
     const userRoleRepository = dataSource.getRepository(UserRoleEntity);
 
-    // Permissions data
     const permissions = [
-      { name: 'READ_USER', description: 'Permission to read user data' },
-      { name: 'WRITE_USER', description: 'Permission to write user data' },
-      { name: 'DELETE_USER', description: 'Permission to delete user data' },
       {
         name: 'read:category',
         description: 'Permission to read category data',
@@ -41,6 +37,107 @@ export async function seedRolePermission() {
         name: 'delete:category',
         description: 'Permission to delete category data',
       },
+
+      { name: 'read:product', description: 'Permission to read product data' },
+      {
+        name: 'create:product',
+        description: 'Permission to create product data',
+      },
+      {
+        name: 'update:product',
+        description: 'Permission to update product data',
+      },
+      {
+        name: 'delete:product',
+        description: 'Permission to delete product data',
+      },
+
+      { name: 'read:unit', description: 'Permission to read unit data' },
+      { name: 'create:unit', description: 'Permission to create unit data' },
+      { name: 'update:unit', description: 'Permission to update unit data' },
+      { name: 'delete:unit', description: 'Permission to delete unit data' },
+
+      {
+        name: 'read: supplier',
+        description: 'Permission to read supplier data',
+      },
+      {
+        name: 'create: supplier',
+        description: 'Permission to create supplier data',
+      },
+      {
+        name: 'update: supplier',
+        description: 'Permission to update supplier data',
+      },
+      {
+        name: 'delete: supplier',
+        description: 'Permission to delete supplier data',
+      },
+
+      {
+        name: 'read: warehouse',
+        description: 'Permission to read warehouse data',
+      },
+      {
+        name: 'create: warehouse',
+        description: 'Permission to create warehouse data',
+      },
+      {
+        name: 'update: warehouse',
+        description: 'Permission to update warehouse data',
+      },
+      {
+        name: 'delete: warehouse',
+        description: 'Permission to delete warehouse data',
+      },
+
+      { name: 'read: inventory', description: 'Permission to read inventory' },
+      {
+        name: 'create: inventory',
+        description: 'Permission to create inventory',
+      },
+      {
+        name: 'update: inventory',
+        description: 'Permission to update inventory',
+      },
+      {
+        name: 'delete: inventory',
+        description: 'Permission to deleete inventory',
+      },
+
+      {
+        name: 'read:produk mixtures',
+        description: 'Permission to read produk mixtures',
+      },
+      {
+        name: 'create:produk mixtures',
+        description: 'Permission to create produk mixtures',
+      },
+      {
+        name: 'update:produk mixtures',
+        description: 'Permission to update produk mixtures',
+      },
+      {
+        name: 'delete:produk mixtures',
+        description: 'Permission to deleete produk mixtures',
+      },
+
+      {
+        name: 'read:transactions',
+        description: 'Permission to read transactions',
+      },
+      {
+        name: 'create:transactions',
+        description: 'Permission to create transactions',
+      },
+      {
+        name: 'update:transactions',
+        description: 'Permission to update transactions',
+      },
+      {
+        name: 'delete:transactions',
+        description: 'Permission to deleete transactions',
+      },
     ];
 
     // Roles data
@@ -48,7 +145,7 @@ export async function seedRolePermission() {
       { name: 'Admin', description: 'Administrator role with full access' },
       { name: 'User', description: 'Standard user role with limited access' },
       {
-        name: 'AdminGudang',
+        name: 'Admin_Gudang',
         description: 'Standard user role with limited access',
       },
     ];
@@ -58,9 +155,9 @@ export async function seedRolePermission() {
       { username: 'admin', email: 'admin@example.com', password: 'admin123' },
       { username: 'user', email: 'user@example.com', password: 'user123' },
       {
-        username: 'gudang',
+        username: 'admin_gudang',
         email: 'gudang@example.com',
-        password: 'gudang123',
+        password: 'admingudang123',
       },
     ];
 
